@@ -1,351 +1,1000 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body {
-  background: #0d1117;
-  color: #e6edf3;
-  padding: 16px;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
+  <title>DETTA.ID — Personal Website</title>
 
-#app {
-  max-width: 420px;
-  width: 100%;
-  margin: 0 auto;
-}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: Arial, sans-serif;
+    }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #30363d;
-  margin-bottom: 24px;
-}
+    body {
+      background: #020713;
+      color: white;
+      overflow-x: hidden;
+    }
 
-header h1 {
-  font-size: 20px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #f0e6d0, #d4b896);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+    /* ================= LOADING ================= */
 
-#streakDisplay {
-  font-size: 14px;
-  color: #f0883e;
-  background: #2d1f0e;
-  padding: 4px 12px;
-  border-radius: 30px;
-  border: 1px solid #f0883e44;
-}
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: #020713;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 99999;
+      transition: 1s;
+    }
 
-/* SALDO */
-.saldo-section {
-  background: #161b22;
-  border-radius: 24px;
-  padding: 28px 20px;
-  text-align: center;
-  border: 1px solid #30363d;
-  margin-bottom: 20px;
-}
+    .loader {
+      width: 65px;
+      height: 65px;
+      border: 4px solid #ffffff15;
+      border-top: 4px solid #38a9ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 30px #168cff;
+    }
 
-.saldo-besar {
-  font-size: 44px;
-  font-weight: 800;
-  color: #f0e6d0;
-  letter-spacing: 1px;
-}
+    #loading p {
+      margin-top: 20px;
+      color: #38a9ff;
+      letter-spacing: 4px;
+      font-size: 13px;
+    }
 
-.target-info {
-  color: #8b949e;
-  font-size: 15px;
-  margin-top: 4px;
-}
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-.progress-wrapper {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+    /* ================= PARTICLES ================= */
 
-.progress-bg {
-  flex: 1;
-  height: 10px;
-  background: #30363d;
-  border-radius: 20px;
-  overflow: hidden;
-}
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
 
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #f0883e, #f5a623);
-  border-radius: 20px;
-  transition: width 0.3s ease;
-}
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #38a9ff;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #168cff;
+      animation: float 9s linear infinite;
+    }
 
-.progress-text {
-  font-size: 14px;
-  font-weight: 600;
-  color: #f0883e;
-  min-width: 44px;
-  text-align: right;
-}
+    @keyframes float {
+      0% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
 
-/* TOMBOL */
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-}
+      20% {
+        opacity: 1;
+      }
 
-.btn {
-  flex: 1;
-  padding: 16px;
-  border: none;
-  border-radius: 16px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s;
-}
+      100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+      }
+    }
 
-.btn:active {
-  transform: scale(0.96);
-}
+    /* ================= NAVBAR ================= */
 
-.tambah {
-  background: #2ea043;
-  color: #fff;
-}
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 18px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-.tambah:hover {
-  background: #3fb950;
-}
+      background: rgba(2, 7, 19, .65);
+      backdrop-filter: blur(15px);
 
-.ambil {
-  background: #da3633;
-  color: #fff;
-}
+      border-bottom: 1px solid #ffffff10;
 
-.ambil:hover {
-  background: #f85149;
-}
+      z-index: 1000;
+    }
 
-.kecil {
-  padding: 10px 16px;
-  font-size: 14px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-}
+    .logo {
+      color: #38a9ff;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 0 0 15px #168cff;
+    }
 
-.reset {
-  background: #21262d;
-  color: #f0e6d0;
-  border: 1px solid #484f58;
-}
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 24px;
+      transition: .3s;
+    }
 
-.reset:hover {
-  background: #30363d;
-}
+    nav a:hover {
+      color: #38a9ff;
+      text-shadow: 0 0 10px #168cff;
+    }
 
-/* TARGET DETAIL */
-.target-detail {
-  display: flex;
-  justify-content: space-between;
-  background: #161b22;
-  padding: 14px 18px;
-  border-radius: 16px;
-  border: 1px solid #30363d;
-  margin-bottom: 16px;
-  font-size: 14px;
-}
+    /* ================= MUSIC BUTTON ================= */
 
-.target-detail span {
-  font-weight: 700;
-  color: #f0e6d0;
-}
+    .music-float {
+      position: fixed;
+      top: 75px;
+      right: 20px;
 
-/* MILESTONE */
-.milestone {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
+      width: 42px;
+      height: 42px;
 
-.milestone span {
-  background: #21262d;
-  padding: 6px 14px;
-  border-radius: 30px;
-  font-size: 13px;
-  border: 1px solid #30363d;
-  color: #8b949e;
-}
+      border: 1px solid #38a9ff55;
+      border-radius: 50%;
 
-.milestone span.tercapai {
-  border-color: #f0883e;
-  color: #f0e6d0;
-  background: #2d1f0e;
-}
+      background: rgba(7, 21, 45, .85);
+      color: white;
 
-/* RIWAYAT */
-.riwayat {
-  background: #161b22;
-  border-radius: 20px;
-  padding: 16px 0;
-  border: 1px solid #30363d;
-  margin-bottom: 20px;
-}
+      font-size: 16px;
+      cursor: pointer;
 
-.riwayat h2 {
-  font-size: 16px;
-  padding: 0 18px 12px;
-  border-bottom: 1px solid #21262d;
-  color: #8b949e;
-}
+      backdrop-filter: blur(12px);
 
-.riwayat-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 18px;
-  border-bottom: 1px solid #21262d;
-  font-size: 14px;
-}
+      box-shadow:
+        0 0 15px #168cff55;
 
-.riwayat-item .jumlah.plus {
-  color: #3fb950;
-}
+      z-index: 9999;
 
-.riwayat-item .jumlah.minus {
-  color: #f85149;
-}
+      transition: .3s;
+    }
 
-.riwayat-item .alasan {
-  color: #8b949e;
-  font-size: 12px;
-}
+    .music-float:hover {
+      transform: scale(1.1);
 
-/* SETTINGS */
-.settings {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px 0;
-}
+      box-shadow:
+        0 0 25px #168cff;
+    }
 
-.settings label {
-  font-size: 14px;
-  color: #8b949e;
-}
+    /* ================= HERO ================= */
 
-.settings input[type="number"] {
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: #f0e6d0;
-  font-size: 16px;
-  flex: 1;
-}
+    .hero {
+      min-height: 100vh;
 
-.settings input:focus {
-  outline: none;
-  border-color: #f0883e;
-}
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-/* MODAL */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  padding: 20px;
-}
+      text-align: center;
 
-.modal.hidden {
-  display: none;
-}
+      padding: 120px 20px 60px;
 
-.modal-content {
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 28px;
-  padding: 28px 22px;
-  max-width: 400px;
-  width: 100%;
-}
+      background:
+        radial-gradient(
+          circle at center,
+          #0757a055,
+          transparent 40%
+        );
+    }
 
-.modal-content h2 {
-  margin-bottom: 12px;
-}
+    .hero-content {
+      animation: appear 1.5s ease;
+    }
 
-.modal-content p {
-  color: #8b949e;
-  margin-bottom: 8px;
-}
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(35px);
+      }
 
-.modal-content input[type="number"] {
-  width: 100%;
-  padding: 14px;
-  background: #0d1117;
-  border: 1px solid #30363d;
-  border-radius: 14px;
-  color: #f0e6d0;
-  font-size: 20px;
-  margin: 8px 0 4px;
-}
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.modal-content input:focus {
-  outline: none;
-  border-color: #f0883e;
-}
+    /* ================= PROFILE ================= */
 
-.alasan-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 8px 0 4px;
-}
+    .profile {
+      width: 145px;
+      height: 145px;
 
-.alasan-btn {
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #e6edf3;
-  padding: 10px 6px;
-  border-radius: 12px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: 0.1s;
-}
+      margin: 0 auto 25px;
 
-.alasan-btn:active {
-  transform: scale(0.95);
-}
+      border-radius: 50%;
 
-.alasan-btn.selected {
-  border-color: #f0883e;
-  background: #2d1f0e;
-  color: #f0e6d0;
-}
+      border: 3px solid #38a9ff;
 
-/* UTILITY */
-.hidden {
-  display: none !important;
-}
+      box-shadow:
+        0 0 20px #168cff,
+        0 0 50px #168cff55;
+
+      overflow: hidden;
+
+      background: #0b1c35;
+    }
+
+    .profile img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ================= HERO TEXT ================= */
+
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 80px);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: #38a9ff;
+
+      text-shadow:
+        0 0 10px #168cff,
+        0 0 30px #168cff,
+        0 0 60px #168cff;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: auto;
+
+      color: #aebed2;
+
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    /* ================= BUTTON ================= */
+
+    .buttons {
+      margin-top: 30px;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-block;
+
+      padding: 14px 28px;
+
+      border-radius: 30px;
+
+      background: #168cff;
+
+      color: white;
+
+      text-decoration: none;
+
+      box-shadow:
+        0 0 20px #168cff88;
+
+      transition: .3s;
+    }
+
+    .button:hover {
+      transform: translateY(-5px);
+
+      box-shadow:
+        0 0 20px #168cff,
+        0 0 50px #168cff;
+    }
+
+    .button.discord {
+      background: #5865f2;
+    }
+
+    .button.instagram {
+      background: #c13584;
+    }
+
+    .button.roblox {
+      background: #111827;
+      border: 1px solid #ffffff22;
+    }
+
+    /* ================= SECTION ================= */
+
+    section {
+      padding: 110px 8%;
+    }
+
+    .title {
+      text-align: center;
+
+      font-size: 40px;
+
+      margin-bottom: 55px;
+    }
+
+    .title span {
+      color: #38a9ff;
+    }
+
+    /* ================= ABOUT ================= */
+
+    .about {
+      max-width: 800px;
+
+      margin: auto;
+
+      text-align: center;
+
+      color: #aebed2;
+
+      line-height: 1.8;
+
+      font-size: 17px;
+    }
+
+    /* ================= CARDS ================= */
+
+    .cards {
+      max-width: 1100px;
+
+      margin: auto;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 25px;
+    }
+
+    .card {
+      padding: 30px;
+
+      text-align: center;
+
+      background:
+        rgba(10, 30, 60, .55);
+
+      border:
+        1px solid #168cff33;
+
+      border-radius: 22px;
+
+      backdrop-filter: blur(12px);
+
+      transition: .4s;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+
+      border-color: #38a9ff;
+
+      box-shadow:
+        0 0 30px #168cff33;
+    }
+
+    .card h3 {
+      color: #38a9ff;
+
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      color: #aebed2;
+
+      line-height: 1.6;
+    }
+
+    /* ================= GAME CARD ================= */
+
+    .game-card {
+      overflow: hidden;
+
+      padding: 0;
+
+      text-align: left;
+    }
+
+    .game-image {
+      height: 180px;
+
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
+
+      font-size: 55px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0757a0,
+          #07152d
+        );
+    }
+
+    .game-info {
+      padding: 25px;
+    }
+
+    .game-info h3 {
+      margin-bottom: 10px;
+    }
+
+    .game-info p {
+      margin-bottom: 18px;
+    }
+
+    .small-button {
+      display: inline-block;
+
+      padding: 10px 20px;
+
+      border-radius: 20px;
+
+      background: #168cff;
+
+      color: white;
+
+      text-decoration: none;
+
+      font-size: 14px;
+    }
+
+    /* ================= CONTACT ================= */
+
+    .contact {
+      text-align: center;
+    }
+
+    .contact p {
+      color: #aebed2;
+
+      margin: 10px;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+      text-align: center;
+
+      padding: 30px;
+
+      color: #718096;
+
+      border-top:
+        1px solid #ffffff15;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 750px) {
+
+      nav {
+        padding: 16px 5%;
+      }
+
+      nav a {
+        margin-left: 8px;
+        font-size: 11px;
+      }
+
+      .logo {
+        font-size: 19px;
+      }
+
+      .profile {
+        width: 120px;
+        height: 120px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 80px 6%;
+      }
+
+      .title {
+        font-size: 32px;
+      }
+
+      .music-float {
+        top: 70px;
+        right: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= LOADING ================= -->
+
+  <div id="loading">
+
+    <div class="loader"></div>
+
+    <p>DETTA.ID</p>
+
+  </div>
+
+
+  <!-- ================= PARTICLES ================= -->
+
+  <div class="particles">
+
+    <div class="particle" style="left:5%;animation-delay:0s;"></div>
+    <div class="particle" style="left:15%;animation-delay:2s;"></div>
+    <div class="particle" style="left:25%;animation-delay:4s;"></div>
+    <div class="particle" style="left:35%;animation-delay:1s;"></div>
+    <div class="particle" style="left:45%;animation-delay:3s;"></div>
+    <div class="particle" style="left:55%;animation-delay:5s;"></div>
+    <div class="particle" style="left:65%;animation-delay:2s;"></div>
+    <div class="particle" style="left:75%;animation-delay:4s;"></div>
+    <div class="particle" style="left:85%;animation-delay:1s;"></div>
+    <div class="particle" style="left:95%;animation-delay:3s;"></div>
+
+  </div>
+
+
+  <!-- ================= NAVBAR ================= -->
+
+  <nav>
+
+    <div class="logo">
+      DETTA.ID
+    </div>
+
+    <div>
+
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#games">Games</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+
+    </div>
+
+  </nav>
+
+
+  <!-- ================= MUSIC ================= -->
+
+  <button id="musicBtn" class="music-float">
+    🎵
+  </button>
+
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+
+  <!-- ================= HERO ================= -->
+
+  <section class="hero" id="home">
+
+    <div class="hero-content">
+
+      <!-- FOTO PROFIL -->
+
+      <div class="profile">
+
+        <img
+          src="https://placehold.co/400x400/07152d/38a9ff?text=DETTA"
+          alt="Foto profil DETTA"
+        >
+
+      </div>
+
+
+      <h1>
+
+        Hi, I'm
+        <span>Detta</span>
+
+      </h1>
+
+
+      <p>
+
+        Welcome to my personal website.
+        A place for my games, projects,
+        social media, and everything I create.
+
+      </p>
+
+
+      <!-- SOCIAL BUTTON -->
+
+      <div class="buttons">
+
+        <a
+          class="button discord"
+          href="https://discord.com/users/1388196965958811798"
+          target="_blank"
+        >
+          🎮 Discord
+        </a>
+
+
+        <a
+          class="button instagram"
+          href="https://www.instagram.com/adidropiansyah_14?stkn=MWs2NTJqcGtmbXllNw=="
+          target="_blank"
+        >
+          📸 Instagram
+        </a>
+
+
+        <a
+          class="button WhatsApp"
+          href="https://wa.me/qr/L7D2NDI3UGVIH1"
+          target="_blank"
+        >
+          📞Whats
+        </a>
+
+
+        <a
+          class="button roblox"
+          href="https://www.roblox.com/share?code=c34a2f8b2d6b304b8623f708ac535cc5&type=Profile&source=ProfileShare&stamp=1790469821127"
+          target="_blank"
+        >
+          🎮 Roblox
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= ABOUT ================= -->
+
+  <section id="about">
+
+    <h2 class="title">
+
+      About
+      <span>Me</span>
+
+    </h2>
+
+
+    <div class="about">
+
+      <p>
+
+        Halo! Gue Detta 👋
+
+        Gue lagi belajar membuat website
+        dan pengen mengembangkan berbagai
+        project digital, termasuk game.
+
+        Website ini bakal terus gue update
+        dengan project-project baru.
+
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= GAMES ================= -->
+
+  <section id="games">
+
+    <h2 class="title">
+
+      My
+      <span>Games</span>
+
+    </h2>
+
+
+    <div class="cards">
+
+      <!-- GAME 1 -->
+
+      <div class="card game-card">
+
+        <div class="game-image">
+          🎮
+        </div>
+
+        <div class="game-info">
+
+          <h3>
+            My First Game
+          </h3>
+
+          <p>
+            Game pertama yang gue
+            masukin ke website ini.
+          </p>
+
+          <a
+            href="#"
+            class="small-button"
+          >
+            Play Game
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- GAME 2 -->
+
+      <div class="card game-card">
+
+        <div class="game-image">
+          ⚡
+        </div>
+
+        <div class="game-info">
+
+          <h3>
+            Project Game
+          </h3>
+
+          <p>
+            Game atau project berikutnya
+            yang sedang gue kembangkan.
+          </p>
+
+          <a
+            href="#"
+            class="small-button"
+          >
+            View Game
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- GAME 3 -->
+
+      <div class="card game-card">
+
+        <div class="game-image">
+          🚀
+        </div>
+
+        <div class="game-info">
+
+          <h3>
+            Coming Soon
+          </h3>
+
+          <p>
+            Game baru bakal muncul
+            di sini nanti.
+          </p>
+
+          <a
+            href="#"
+            class="small-button"
+          >
+            Coming Soon
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= PROJECT ================= -->
+
+  <section id="projects">
+
+    <h2 class="title">
+
+      My
+      <span>Projects</span>
+
+    </h2>
+
+
+    <div class="cards">
+
+      <div class="card">
+
+        <h3>
+          🌐 Website
+        </h3>
+
+        <p>
+          Personal website dengan
+          konsep dark blue glassmorphism.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>
+          🎮 Game
+        </h3>
+
+        <p>
+          Project game yang nantinya
+          bisa dimainkan langsung.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>
+          💡 Future Project
+        </h3>
+
+        <p>
+          Tempat untuk project-project
+          baru yang bakal gue buat.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= CONTACT ================= -->
+
+  <section
+    class="contact"
+    id="contact"
+  >
+
+    <h2 class="title">
+
+      Contact
+      <span>Me</span>
+
+    </h2>
+
+
+    <p>
+      📧 adidropiansyah@gmail.com
+    </p>
+
+
+    <p>
+      🎮 Discord: benedl.
+    </p>
+
+
+    <p>
+      📸 Instagram: @adidropiansyah_14
+    </p>
+
+
+    <div class="buttons">
+
+      <a
+        href="mailto: adidropiansyah@gmail.com"
+        class="button"
+      >
+        Contact Me
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= FOOTER ================= -->
+
+  <footer>
+
+    © 2026 DETTA.ID
+
+    <br>
+
+    Made with 💙
+
+  </footer>
+
+
+  <!-- ================= JAVASCRIPT ================= -->
+
+  <script>
+
+    /* LOADING */
+
+    window.addEventListener(
+      "load",
+      function() {
+
+        setTimeout(
+          function() {
+
+            const loading =
+              document.getElementById("loading");
+
+            loading.style.opacity = "0";
+
+            setTimeout(
+              function() {
+
+                loading.style.display = "none";
+
+              },
+              1000
+            );
+
+          },
+          1500
+        );
+
+      }
+    );
+
+
+    /* MUSIC */
+
+    const music =
+      document.getElementById("bgMusic");
+
+    const musicBtn =
+      document.getElementById("musicBtn");
+
+
+    musicBtn.addEventListener(
+      "click",
+      function() {
+
+        if (music.paused) {
+
+          music.play();
+
+          musicBtn.textContent = "🔊";
+
+        } else {
+
+          music.pause();
+
+          musicBtn.textContent = "🎵";
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
