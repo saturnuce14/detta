@@ -1,1000 +1,841 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>DETTA.ID — Personal Website</title>
+  <meta name="theme-color" content="#050b18">
+  <meta name="description" content="Welcome to DETTA.ID — personal profile, projects, and social links.">
+  <title>DETTA.ID — Personal Space</title>
 
   <style>
+    :root {
+      --bg: #050b18;
+      --panel: rgba(13, 25, 48, .72);
+      --blue: #38a9ff;
+      --cyan: #61e5ff;
+      --text: #edf6ff;
+      --muted: #91a7c4;
+      --border: rgba(98, 178, 255, .19);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+
+    html {
       scroll-behavior: smooth;
-      font-family: Arial, sans-serif;
     }
 
     body {
-      background: #020713;
-      color: white;
+      min-height: 100vh;
       overflow-x: hidden;
+      background:
+        radial-gradient(ellipse at 50% 0%, #102953 0%, transparent 50%),
+        var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     }
 
-    /* ================= LOADING ================= */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-    #loading {
+    button {
+      font: inherit;
+    }
+
+    #particles {
       position: fixed;
       inset: 0;
-      background: #020713;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 99999;
-      transition: 1s;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .loader {
-      width: 65px;
-      height: 65px;
-      border: 4px solid #ffffff15;
-      border-top: 4px solid #38a9ff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      box-shadow: 0 0 30px #168cff;
-    }
-
-    #loading p {
-      margin-top: 20px;
-      color: #38a9ff;
-      letter-spacing: 4px;
-      font-size: 13px;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* ================= PARTICLES ================= */
-
-    .particles {
       position: fixed;
       inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      background: #050b18;
+      transition: opacity .6s, visibility .6s;
+    }
+
+    .loader.done {
+      opacity: 0;
+      visibility: hidden;
       pointer-events: none;
+    }
+
+    .loader-logo {
+      font-size: 35px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: var(--cyan);
+      text-shadow: 0 0 25px #38a9ff99;
+    }
+
+    .loader-bar {
+      width: 150px;
+      height: 3px;
       overflow: hidden;
-      z-index: -1;
+      border-radius: 10px;
+      background: #14243b;
     }
 
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #38a9ff;
-      border-radius: 50%;
-      box-shadow: 0 0 15px #168cff;
-      animation: float 9s linear infinite;
+    .loader-bar::after {
+      content: "";
+      display: block;
+      width: 45%;
+      height: 100%;
+      background: var(--cyan);
+      box-shadow: 0 0 15px var(--blue);
+      animation: loading 1s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0% {
-        transform: translateY(100vh);
-        opacity: 0;
-      }
-
-      20% {
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(-10vh);
-        opacity: 0;
-      }
+    @keyframes loading {
+      from { transform: translateX(-110%); }
+      to { transform: translateX(330%); }
     }
 
-    /* ================= NAVBAR ================= */
-
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 18px 8%;
+    .navbar {
+      position: relative;
+      z-index: 5;
+      width: min(1100px, 92%);
+      margin: auto;
+      padding: 24px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      background: rgba(2, 7, 19, .65);
-      backdrop-filter: blur(15px);
-
-      border-bottom: 1px solid #ffffff10;
-
-      z-index: 1000;
+      gap: 16px;
     }
 
-    .logo {
-      color: #38a9ff;
-      font-size: 24px;
-      font-weight: bold;
-      text-shadow: 0 0 15px #168cff;
+    .brand {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: 2px;
     }
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 24px;
-      transition: .3s;
+    .brand span {
+      color: var(--blue);
     }
 
-    nav a:hover {
-      color: #38a9ff;
-      text-shadow: 0 0 10px #168cff;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      color: var(--muted);
+      font-size: 13px;
     }
 
-    /* ================= MUSIC BUTTON ================= */
+    .nav-links a:hover {
+      color: var(--cyan);
+    }
 
-    .music-float {
+    .music-btn {
       position: fixed;
-      top: 75px;
+      z-index: 50;
+      top: 20px;
       right: 20px;
-
-      width: 42px;
-      height: 42px;
-
-      border: 1px solid #38a9ff55;
-      border-radius: 50%;
-
-      background: rgba(7, 21, 45, .85);
-      color: white;
-
-      font-size: 16px;
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      border: 1px solid var(--border);
+      background: rgba(9, 24, 46, .9);
+      color: var(--cyan);
       cursor: pointer;
-
+      box-shadow: 0 0 22px #168aff1c;
       backdrop-filter: blur(12px);
-
-      box-shadow:
-        0 0 15px #168cff55;
-
-      z-index: 9999;
-
-      transition: .3s;
+      transition: .25s;
     }
 
-    .music-float:hover {
-      transform: scale(1.1);
-
-      box-shadow:
-        0 0 25px #168cff;
+    .music-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 24px #168aff55;
     }
-
-    /* ================= HERO ================= */
 
     .hero {
-      min-height: 100vh;
-
+      position: relative;
+      z-index: 1;
+      width: min(900px, 92%);
+      min-height: 610px;
+      margin: 20px auto 70px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-
+      justify-content: center;
       text-align: center;
-
-      padding: 120px 20px 60px;
-
-      background:
-        radial-gradient(
-          circle at center,
-          #0757a055,
-          transparent 40%
-        );
+      padding: 40px 20px;
     }
 
-    .hero-content {
-      animation: appear 1.5s ease;
+    .avatar-wrap {
+      position: relative;
+      width: 154px;
+      height: 154px;
+      margin-bottom: 30px;
     }
 
-    @keyframes appear {
-      from {
-        opacity: 0;
-        transform: translateY(35px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* ================= PROFILE ================= */
-
-    .profile {
-      width: 145px;
-      height: 145px;
-
-      margin: 0 auto 25px;
-
+    .avatar-ring {
+      position: absolute;
+      inset: -8px;
+      border: 2px solid transparent;
+      border-top-color: var(--cyan);
+      border-bottom-color: var(--blue);
       border-radius: 50%;
-
-      border: 3px solid #38a9ff;
-
-      box-shadow:
-        0 0 20px #168cff,
-        0 0 50px #168cff55;
-
-      overflow: hidden;
-
-      background: #0b1c35;
+      animation: spin 7s linear infinite;
+      filter: drop-shadow(0 0 8px #38a9ff66);
     }
 
-    .profile img {
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid #38a9ff77;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #102b50, #071426);
+      box-shadow: 0 0 45px #168aff25;
+    }
+
+    .avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    /* ================= HERO TEXT ================= */
+    .avatar-fallback {
+      font-size: 46px;
+      font-weight: 900;
+      color: var(--cyan);
+      text-shadow: 0 0 24px #38a9ff88;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      background: #0c1c32a8;
+      color: #a9dfff;
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #43e6a1;
+      box-shadow: 0 0 12px #43e6a1;
+    }
 
     .hero h1 {
-      font-size: clamp(42px, 8vw, 80px);
-      margin-bottom: 20px;
+      font-size: clamp(42px, 9vw, 78px);
+      line-height: 1.08;
+      font-weight: 950;
+      letter-spacing: -2px;
     }
 
-    .hero h1 span {
-      color: #38a9ff;
-
-      text-shadow:
-        0 0 10px #168cff,
-        0 0 30px #168cff,
-        0 0 60px #168cff;
+    .gradient-text {
+      color: var(--cyan);
+      background: linear-gradient(90deg, #38a9ff, #7bf1ff, #668bff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .hero p {
-      max-width: 650px;
-      margin: auto;
-
-      color: #aebed2;
-
-      font-size: 18px;
-      line-height: 1.7;
-    }
-
-    /* ================= BUTTON ================= */
-
-    .buttons {
-      margin-top: 30px;
-
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-
-      gap: 12px;
-    }
-
-    .button {
-      display: inline-block;
-
-      padding: 14px 28px;
-
-      border-radius: 30px;
-
-      background: #168cff;
-
-      color: white;
-
-      text-decoration: none;
-
-      box-shadow:
-        0 0 20px #168cff88;
-
-      transition: .3s;
-    }
-
-    .button:hover {
-      transform: translateY(-5px);
-
-      box-shadow:
-        0 0 20px #168cff,
-        0 0 50px #168cff;
-    }
-
-    .button.discord {
-      background: #5865f2;
-    }
-
-    .button.instagram {
-      background: #c13584;
-    }
-
-    .button.roblox {
-      background: #111827;
-      border: 1px solid #ffffff22;
-    }
-
-    /* ================= SECTION ================= */
-
-    section {
-      padding: 110px 8%;
-    }
-
-    .title {
-      text-align: center;
-
-      font-size: 40px;
-
-      margin-bottom: 55px;
-    }
-
-    .title span {
-      color: #38a9ff;
-    }
-
-    /* ================= ABOUT ================= */
-
-    .about {
-      max-width: 800px;
-
-      margin: auto;
-
-      text-align: center;
-
-      color: #aebed2;
-
+    .subtitle {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 15px;
       line-height: 1.8;
-
-      font-size: 17px;
     }
 
-    /* ================= CARDS ================= */
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
 
-    .cards {
-      max-width: 1100px;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 47px;
+      padding: 0 21px;
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 750;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
 
-      margin: auto;
+    .btn:hover {
+      transform: translateY(-3px);
+    }
 
+    .btn-primary {
+      color: #03101f;
+      border-color: transparent;
+      background: linear-gradient(100deg, #38a9ff, #6ce8ff);
+      box-shadow: 0 7px 28px #168aff26;
+    }
+
+    .btn-outline {
+      background: rgba(15, 31, 54, .72);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--blue);
+      box-shadow: 0 0 20px #168aff20;
+    }
+
+    .section {
+      position: relative;
+      z-index: 1;
+      width: min(1000px, 90%);
+      margin: 0 auto 90px;
+    }
+
+    .section-heading {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      margin-top: 9px;
+      font-size: clamp(27px, 5vw, 37px);
+      letter-spacing: -.8px;
+    }
+
+    .section-heading p {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid {
       display: grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap: 25px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
     }
 
     .card {
-      padding: 30px;
-
-      text-align: center;
-
-      background:
-        rgba(10, 30, 60, .55);
-
-      border:
-        1px solid #168cff33;
-
-      border-radius: 22px;
-
-      backdrop-filter: blur(12px);
-
-      transition: .4s;
+      padding: 24px;
+      min-height: 180px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(145deg, #10213bc9, #081426c9);
+      box-shadow: inset 0 1px #ffffff05;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
     }
 
     .card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-5px);
+      border-color: #38a9ff77;
+      box-shadow: 0 15px 40px #00000022, 0 0 25px #168aff0d;
+    }
 
-      border-color: #38a9ff;
-
-      box-shadow:
-        0 0 30px #168cff33;
+    .card-icon {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      background: #38a9ff13;
+      border: 1px solid #38a9ff27;
+      font-size: 21px;
     }
 
     .card h3 {
-      color: #38a9ff;
-
-      margin-bottom: 15px;
+      margin-bottom: 9px;
+      font-size: 16px;
     }
 
     .card p {
-      color: #aebed2;
-
-      line-height: 1.6;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
     }
 
-    /* ================= GAME CARD ================= */
-
-    .game-card {
-      overflow: hidden;
-
-      padding: 0;
-
-      text-align: left;
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    .game-image {
-      height: 180px;
-
+    .social-card {
       display: flex;
-
-      justify-content: center;
       align-items: center;
-
-      font-size: 55px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #0757a0,
-          #07152d
-        );
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: #0d1a2bc9;
+      transition: .25s;
     }
 
-    .game-info {
-      padding: 25px;
+    .social-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--blue);
+      background: #112745;
     }
 
-    .game-info h3 {
-      margin-bottom: 10px;
+    .social-icon {
+      font-size: 25px;
     }
 
-    .game-info p {
-      margin-bottom: 18px;
+    .social-card strong {
+      display: block;
+      font-size: 13px;
     }
 
-    .small-button {
-      display: inline-block;
-
-      padding: 10px 20px;
-
-      border-radius: 20px;
-
-      background: #168cff;
-
-      color: white;
-
-      text-decoration: none;
-
-      font-size: 14px;
+    .social-card small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
     }
 
-    /* ================= CONTACT ================= */
-
-    .contact {
+    .contact-box {
+      padding: 35px 20px;
       text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background:
+        radial-gradient(ellipse at 50% 0%, #12335a88, transparent 75%),
+        #091426c9;
     }
 
-    .contact p {
-      color: #aebed2;
-
-      margin: 10px;
+    .contact-box h2 {
+      font-size: clamp(25px, 5vw, 35px);
     }
 
-    /* ================= FOOTER ================= */
+    .contact-box p {
+      margin: 12px 0 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+    }
 
     footer {
+      position: relative;
+      z-index: 1;
+      padding: 25px 15px 35px;
+      border-top: 1px solid #ffffff0b;
       text-align: center;
-
-      padding: 30px;
-
-      color: #718096;
-
-      border-top:
-        1px solid #ffffff15;
+      color: #7186a2;
+      font-size: 11px;
+      line-height: 2;
     }
 
-    /* ================= MOBILE ================= */
+    footer span {
+      color: var(--cyan);
+    }
 
-    @media (max-width: 750px) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .65s, transform .65s;
+    }
 
-      nav {
-        padding: 16px 5%;
-      }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-      nav a {
-        margin-left: 8px;
+    @media (max-width: 700px) {
+      .nav-links {
+        gap: 13px;
         font-size: 11px;
       }
 
-      .logo {
-        font-size: 19px;
+      .navbar {
+        padding-top: 20px;
       }
 
-      .profile {
-        width: 120px;
-        height: 120px;
+      .hero {
+        min-height: 570px;
+        margin-top: 0;
       }
 
-      .hero p {
-        font-size: 15px;
-      }
-
-      .cards {
+      .grid {
         grid-template-columns: 1fr;
       }
 
-      section {
-        padding: 80px 6%;
+      .card {
+        min-height: auto;
       }
 
-      .title {
-        font-size: 32px;
+      .social-grid {
+        grid-template-columns: 1fr;
       }
 
-      .music-float {
-        top: 70px;
-        right: 15px;
+      .music-btn {
+        top: auto;
+        bottom: 20px;
+        right: 17px;
+      }
+
+      .section {
+        margin-bottom: 65px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .nav-links {
+        gap: 9px;
+      }
+
+      .brand {
+        font-size: 19px;
+      }
+
+      .hero h1 {
+        letter-spacing: -1px;
+      }
+
+      .btn {
+        padding: 0 15px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
-
-  <!-- ================= LOADING ================= -->
-
-  <div id="loading">
-
-    <div class="loader"></div>
-
-    <p>DETTA.ID</p>
-
+  <div class="loader" id="loader">
+    <div class="loader-logo">DETTA.ID</div>
+    <div class="loader-bar"></div>
+    <p style="color:#91a7c4;font-size:12px">Preparing your experience...</p>
   </div>
 
+  <canvas id="particles"></canvas>
 
-  <!-- ================= PARTICLES ================= -->
-
-  <div class="particles">
-
-    <div class="particle" style="left:5%;animation-delay:0s;"></div>
-    <div class="particle" style="left:15%;animation-delay:2s;"></div>
-    <div class="particle" style="left:25%;animation-delay:4s;"></div>
-    <div class="particle" style="left:35%;animation-delay:1s;"></div>
-    <div class="particle" style="left:45%;animation-delay:3s;"></div>
-    <div class="particle" style="left:55%;animation-delay:5s;"></div>
-    <div class="particle" style="left:65%;animation-delay:2s;"></div>
-    <div class="particle" style="left:75%;animation-delay:4s;"></div>
-    <div class="particle" style="left:85%;animation-delay:1s;"></div>
-    <div class="particle" style="left:95%;animation-delay:3s;"></div>
-
-  </div>
-
-
-  <!-- ================= NAVBAR ================= -->
-
-  <nav>
-
-    <div class="logo">
-      DETTA.ID
-    </div>
-
-    <div>
-
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#games">Games</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-
-    </div>
-
-  </nav>
-
-
-  <!-- ================= MUSIC ================= -->
-
-  <button id="musicBtn" class="music-float">
+  <button class="music-btn" id="musicBtn"
+          aria-label="Putar atau jeda musik" title="Musik">
     🎵
   </button>
 
-  <audio id="bgMusic" loop>
+  <audio id="bgMusic" loop preload="none">
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 
+  <nav class="navbar">
+    <a class="brand" href="#home">DETTA<span>.ID</span></a>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
-  <!-- ================= HERO ================= -->
-
-  <section class="hero" id="home">
-
-    <div class="hero-content">
-
-      <!-- FOTO PROFIL -->
-
-      <div class="profile">
-
-        <img
-          src="https://placehold.co/400x400/07152d/38a9ff?text=DETTA"
-          alt="Foto profil DETTA"
-        >
-
+  <main>
+    <section class="hero" id="home">
+      <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar">
+          <img
+            src="https://placehold.co/400x400/07152d/38a9ff?text=DETTA"
+            alt="Foto profil DETTA"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='grid';"
+          >
+          <div class="avatar-fallback" style="display:none">D</div>
+        </div>
       </div>
 
+      <div class="status">
+        <span class="status-dot"></span>
+        Welcome to my digital space
+      </div>
 
-      <h1>
+      <h1>HELLO, I'M<br><span class="gradient-text">DETTA.ID</span></h1>
 
-        Hi, I'm
-        <span>Detta</span>
-
-      </h1>
-
-
-      <p>
-
-        Welcome to my personal website.
-        A place for my games, projects,
-        social media, and everything I create.
-
+      <p class="subtitle">
+        Student · Tech Enthusiast · Gamer<br>
+        Exploring the digital world, one project at a time.
       </p>
 
-
-      <!-- SOCIAL BUTTON -->
-
-      <div class="buttons">
-
-        <a
-          class="button discord"
-          href="https://discord.com/users/1388196965958811798"
-          target="_blank"
-        >
-          🎮 Discord
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">
+          ✦ Explore My Space
         </a>
-
-
-        <a
-          class="button instagram"
-          href="https://www.instagram.com/adidropiansyah_14?stkn=MWs2NTJqcGtmbXllNw=="
-          target="_blank"
-        >
-          📸 Instagram
-        </a>
-
-
-        <a
-          class="button WhatsApp"
-          href="https://wa.me/qr/L7D2NDI3UGVIH1"
-          target="_blank"
-        >
-          📞Whats
-        </a>
-
-
-        <a
-          class="button roblox"
-          href="https://www.roblox.com/share?code=c34a2f8b2d6b304b8623f708ac535cc5&type=Profile&source=ProfileShare&stamp=1790469821127"
-          target="_blank"
-        >
-          🎮 Roblox
+        <a class="btn btn-outline"
+           href="https://www.instagram.com/adidropiansyah_14/"
+           target="_blank" rel="noopener noreferrer">
+          ↗ Follow Me
         </a>
       </div>
+    </section>
 
-    </div>
+    <section class="section reveal" id="about">
+      <div class="section-heading">
+        <div class="eyebrow">A Little About Me</div>
+        <h2>Inside My World</h2>
+        <p>Things I enjoy and explore every day.</p>
+      </div>
 
-  </section>
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">💻</div>
+          <h3>Coding</h3>
+          <p>Learning to build websites, experiment with code, and turn ideas into digital projects.</p>
+        </article>
 
+        <article class="card">
+          <div class="card-icon">🎮</div>
+          <h3>Gaming</h3>
+          <p>Exploring games, having fun, and connecting with other players.</p>
+        </article>
 
-  <!-- ================= ABOUT ================= -->
+        <article class="card">
+          <div class="card-icon">🚀</div>
+          <h3>Exploring</h3>
+          <p>Always curious about technology, creative ideas, and new things to learn.</p>
+        </article>
+      </div>
+    </section>
 
-  <section id="about">
+    <section class="section reveal" id="projects">
+      <div class="section-heading">
+        <div class="eyebrow">My Playground</div>
+        <h2>Games & Projects</h2>
+        <p>A small collection of things from my digital world.</p>
+      </div>
 
-    <h2 class="title">
+      <div class="grid">
+        <article class="card">
+          <div class="card-icon">🌐</div>
+          <h3>Personal Website</h3>
+          <p>This website is my personal space to experiment with web design and development.</p>
+        </article>
 
-      About
-      <span>Me</span>
-
-    </h2>
-
-
-    <div class="about">
-
-      <p>
-
-        Halo! Gue Detta 👋
-
-        Gue lagi belajar membuat website
-        dan pengen mengembangkan berbagai
-        project digital, termasuk game.
-
-        Website ini bakal terus gue update
-        dengan project-project baru.
-
-      </p>
-
-    </div>
-
-  </section>
-
-
-  <!-- ================= GAMES ================= -->
-
-  <section id="games">
-
-    <h2 class="title">
-
-      My
-      <span>Games</span>
-
-    </h2>
-
-
-    <div class="cards">
-
-      <!-- GAME 1 -->
-
-      <div class="card game-card">
-
-        <div class="game-image">
-          🎮
-        </div>
-
-        <div class="game-info">
-
-          <h3>
-            My First Game
-          </h3>
-
-          <p>
-            Game pertama yang gue
-            masukin ke website ini.
-          </p>
-
-          <a
-            href="#"
-            class="small-button"
-          >
-            Play Game
+        <article class="card">
+          <div class="card-icon">🎮</div>
+          <h3>Roblox</h3>
+          <p>Visit my Roblox profile and discover my gaming world.</p>
+          <a class="btn btn-outline"
+             style="margin-top:16px"
+             href="https://www.roblox.com/share?code=c34a2f8b2d6b304b8623f708ac535cc5&type=Profile&source=ProfileShare&stamp=1790469821127"
+             target="_blank" rel="noopener noreferrer">
+            Open Profile ↗
           </a>
+        </article>
 
-        </div>
+        <article class="card">
+          <div class="card-icon">✨</div>
+          <h3>Coming Soon</h3>
+          <p>More experiments and projects will appear here as I continue learning.</p>
+        </article>
+      </div>
+    </section>
 
+    <section class="section reveal" id="contact">
+      <div class="section-heading">
+        <div class="eyebrow">Find Me Online</div>
+        <h2>Let's Connect</h2>
+        <p>Find me on these platforms.</p>
       </div>
 
+      <div class="social-grid">
+        <a class="social-card"
+           href="https://www.instagram.com/adidropiansyah_14/"
+           target="_blank" rel="noopener noreferrer">
+          <span class="social-icon">📸</span>
+          <span>
+            <strong>Instagram</strong>
+            <small>@adidropiansyah_14</small>
+          </span>
+        </a>
 
-      <!-- GAME 2 -->
+        <a class="social-card"
+           href="https://www.roblox.com/share?code=c34a2f8b2d6b304b8623f708ac535cc5&type=Profile&source=ProfileShare&stamp=1790469821127"
+           target="_blank" rel="noopener noreferrer">
+          <span class="social-icon">🎮</span>
+          <span>
+            <strong>Roblox</strong>
+            <small>My gaming profile</small>
+          </span>
+        </a>
 
-      <div class="card game-card">
-
-        <div class="game-image">
-          ⚡
-        </div>
-
-        <div class="game-info">
-
-          <h3>
-            Project Game
-          </h3>
-
-          <p>
-            Game atau project berikutnya
-            yang sedang gue kembangkan.
-          </p>
-
-          <a
-            href="#"
-            class="small-button"
-          >
-            View Game
-          </a>
-
-        </div>
-
+        <a class="social-card"
+           href="https://discord.com/users/1388196965958811798"
+           target="_blank" rel="noopener noreferrer">
+          <span class="social-icon">💬</span>
+          <span>
+            <strong>Discord</strong>
+            <small>Connect with me</small>
+          </span>
+        </a>
       </div>
+    </section>
 
-
-      <!-- GAME 3 -->
-
-      <div class="card game-card">
-
-        <div class="game-image">
-          🚀
-        </div>
-
-        <div class="game-info">
-
-          <h3>
-            Coming Soon
-          </h3>
-
-          <p>
-            Game baru bakal muncul
-            di sini nanti.
-          </p>
-
-          <a
-            href="#"
-            class="small-button"
-          >
-            Coming Soon
-          </a>
-
-        </div>
-
+    <section class="section reveal">
+      <div class="contact-box">
+        <h2>Thanks for visiting <span class="gradient-text">DETTA.ID</span></h2>
+        <p>Keep exploring, keep creating, and never stop learning.</p>
+        <a class="btn btn-primary"
+           href="https://www.instagram.com/adidropiansyah_14/"
+           target="_blank" rel="noopener noreferrer">
+          Say Hello ↗
+        </a>
       </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ================= PROJECT ================= -->
-
-  <section id="projects">
-
-    <h2 class="title">
-
-      My
-      <span>Projects</span>
-
-    </h2>
-
-
-    <div class="cards">
-
-      <div class="card">
-
-        <h3>
-          🌐 Website
-        </h3>
-
-        <p>
-          Personal website dengan
-          konsep dark blue glassmorphism.
-        </p>
-
-      </div>
-
-
-      <div class="card">
-
-        <h3>
-          🎮 Game
-        </h3>
-
-        <p>
-          Project game yang nantinya
-          bisa dimainkan langsung.
-        </p>
-
-      </div>
-
-
-      <div class="card">
-
-        <h3>
-          💡 Future Project
-        </h3>
-
-        <p>
-          Tempat untuk project-project
-          baru yang bakal gue buat.
-        </p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- ================= CONTACT ================= -->
-
-  <section
-    class="contact"
-    id="contact"
-  >
-
-    <h2 class="title">
-
-      Contact
-      <span>Me</span>
-
-    </h2>
-
-
-    <p>
-      📧 adidropiansyah@gmail.com
-    </p>
-
-
-    <p>
-      🎮 Discord: benedl.
-    </p>
-
-
-    <p>
-      📸 Instagram: @adidropiansyah_14
-    </p>
-
-
-    <div class="buttons">
-
-      <a
-        href="mailto: adidropiansyah@gmail.com"
-        class="button"
-      >
-        Contact Me
-      </a>
-
-    </div>
-
-  </section>
-
-
-  <!-- ================= FOOTER ================= -->
+    </section>
+  </main>
 
   <footer>
-
-    © 2026 DETTA.ID
-
-    <br>
-
-    Made with 💙
-
+    <p>Designed with <span>♥</span> by DETTA.ID</p>
+    <p>© <span id="year"></span> DETTA.ID · All rights reserved.</p>
   </footer>
 
-
-  <!-- ================= JAVASCRIPT ================= -->
-
   <script>
+    // Loading screen
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loader").classList.add("done");
+      }, 900);
+    });
 
-    /* LOADING */
+    // Fallback in case the load event is delayed
+    setTimeout(() => {
+      document.getElementById("loader")?.classList.add("done");
+    }, 3000);
 
-    window.addEventListener(
-      "load",
-      function() {
+    // Current year
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
 
-        setTimeout(
-          function() {
+    // Background music: starts only after a user tap
+    const music = document.getElementById("bgMusic");
+    const musicBtn = document.getElementById("musicBtn");
 
-            const loading =
-              document.getElementById("loading");
-
-            loading.style.opacity = "0";
-
-            setTimeout(
-              function() {
-
-                loading.style.display = "none";
-
-              },
-              1000
-            );
-
-          },
-          1500
-        );
-
-      }
-    );
-
-
-    /* MUSIC */
-
-    const music =
-      document.getElementById("bgMusic");
-
-    const musicBtn =
-      document.getElementById("musicBtn");
-
-
-    musicBtn.addEventListener(
-      "click",
-      function() {
-
-        if (music.paused) {
-
-          music.play();
-
+    musicBtn.addEventListener("click", async () => {
+      if (music.paused) {
+        try {
+          await music.play();
           musicBtn.textContent = "🔊";
-
-        } else {
-
-          music.pause();
-
+          musicBtn.title = "Jeda musik";
+        } catch (error) {
           musicBtn.textContent = "🎵";
+          alert("Musik belum bisa diputar. Pastikan file music.mp3 ada di folder yang sama dengan index.html.");
+        }
+      } else {
+        music.pause();
+        musicBtn.textContent = "🎵";
+        musicBtn.title = "Putar musik";
+      }
+    });
 
+    // Reveal sections while scrolling
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach(element => {
+      revealObserver.observe(element);
+    });
+
+    // Animated background particles
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let width = 0;
+    let height = 0;
+    let animationId;
+
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const count = Math.min(
+        65,
+        Math.max(22, Math.floor(width / 7))
+      );
+
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 1.5 + 0.4,
+        speed: Math.random() * 0.35 + 0.08,
+        alpha: Math.random() * 0.5 + 0.15
+      }));
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      particles.forEach(p => {
+        p.y -= p.speed;
+
+        if (p.y < -5) {
+          p.y = height + 5;
+          p.x = Math.random() * width;
         }
 
-      }
-    );
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(90, 190, 255, ${p.alpha})`;
+        ctx.fill();
+      });
 
-  </script>
+      animationId = requestAnimationFrame(drawParticles);
+    }
 
-</body>
-</html>
+    resizeCanvas();
+    drawParticles();
+
+    window.addEventListener("resize", resizeCanvas);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationId);
+      } else {
+        cancelAnimationFrame(ani
